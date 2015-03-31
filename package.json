@@ -1,0 +1,23 @@
+{
+  "name": "websocket",
+  "version": "0.0.1",
+  "description": "a websocket project, aim to push notification to front-end.",
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {
+    "express": "^4.12.2",
+    "hiredis": "^0.2.0",
+    "redis": "^0.12.1",
+    "socket.io": "^1.3.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "websocket"
+  ],
+  "author": "yanqing.wang",
+  "license": "ISC"
+}
