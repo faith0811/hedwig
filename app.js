@@ -23,7 +23,7 @@ if (app.get('env') === 'dev') {
 }
 
 if (app.get('env') === 'prod') {
-  //TODO PRODUCTION ENVIRONMENT
+  // TODO PRODUCTION ENVIRONMENT
 }
 
 /**
@@ -44,5 +44,5 @@ io.sockets.on('connection', require('./api/socket'));
  */
 
 server.listen(app.get('port'), function () {
-  console.log('Server Listening on port' + app.get('port'));
+  console.log('Server Listening on port: ' + app.get('port'));
 })
