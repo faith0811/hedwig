@@ -20,6 +20,7 @@ function socket_event (socket) {
   socket.on('auth', function (data) {
     console.log('auth data: ' + data.token);
     redis_client._get('123456', function (err, reply) {
+      console.log(err);
       console.log(reply);
     });
   });
