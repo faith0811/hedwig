@@ -1,7 +1,13 @@
 
 /**
+ * Main Application
+ */
+
+/**
  * Module dependencies
  */
+
+ "use strict";
 
 var express = require('express'),
   api = require('./api'),

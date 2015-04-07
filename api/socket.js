@@ -3,22 +3,30 @@
  * Socket
  */
 
-var redis_client = require("../redis");
+"use strict";
+
 var auth_controller = require("../auth");
 
 function socket_event (socket) {
   console.log('connected to ' + socket.id);
 
-  socket.on('disconnect', function () {
-    console.log('disconnected from ' + socket.id);
+  socket.once('disconnect', function () {
+    console.log('disconnected from user_id: ' + socket.user_id);
   });
 
-  socket.on('auth', function (token) {
-    promise = auth_controller.get_user_id_promise(token);
+  socket.once('auth', function (token) {
+    var promise = auth_controller.get_user_id_promise(token);
+    promise.then(function (user_id) {
+      socket.user_id = user_id;
+    }, function (err) {
+      console.error(err);
+    });
     auth_controller.register(promise, socket.id);
   });
-
-  socket.on('')
 };
+
+/**
+ * Export
+ */
 
 module.exports = socket_event;
