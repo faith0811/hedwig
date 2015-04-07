@@ -4,5 +4,5 @@ socket.on('connect', function () {
   console.log('connected.');
 
   //auth
-  socket.emit('auth', '12345678');
+  socket.emit('auth', '123456');
 });

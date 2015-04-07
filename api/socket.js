@@ -17,6 +17,12 @@ function socket_event (socket) {
   socket.once('auth', function (token) {
     var promise = auth_controller.get_user_id_promise(token);
     promise.then(function (user_id) {
+      // if user id is null., kill the connection
+      if (user_id == null) {
+        socket.disconnect();
+        return;
+      }
+      // else bind the user id to socket
       socket.user_id = user_id;
     }, function (err) {
       console.error(err);
