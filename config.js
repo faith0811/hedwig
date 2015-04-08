@@ -6,7 +6,7 @@
 "use strict";
 
 /**
- * Server Settings
+ * Server Settingse
  */
 
 var SERVER_SETTINGS = {
@@ -26,7 +26,7 @@ var REDIS_GENERAL_SETTINGS = {
   prefix: ""
 };
 
-var REDIS_SUBSRIBE_CHANNEL = 'draenoe_test';
+var REDIS_SUBSCRIBE_CHANNEL = "draenor_test";
 
 /**
  * Export
@@ -34,4 +34,4 @@ var REDIS_SUBSRIBE_CHANNEL = 'draenoe_test';
 
 module.exports.SERVER_SETTINGS = SERVER_SETTINGS;
 module.exports.REDIS_SETTINGS = REDIS_GENERAL_SETTINGS;
-module.exports.REDIS_SUBSRIBE_CHANNEL = REDIS_SUBSRIBE_CHANNEL;
+module.exports.REDIS_SUBSCRIBE_CHANNEL = REDIS_SUBSCRIBE_CHANNEL;

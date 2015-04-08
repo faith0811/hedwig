@@ -3,7 +3,7 @@
  * Auth Controller
  */
 
- "use strict";
+"use strict";
 
 var Promise = require("promise"),
     tc = require("./redis").TokenController;

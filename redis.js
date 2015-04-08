@@ -9,9 +9,12 @@
  * Config Redis
  */
 
-var redis_settings = require("./config").REDIS_SETTINGS,
+var redis_subscibe_channel = require("./config").REDIS_SUBSCRIBE_CHANNEL,
+    redis_settings = require("./config").REDIS_SETTINGS,
     redis = require("redis"),
-    Promise = require("promise");
+    Promise = require("promise"),
+    util = require("util"),
+    EventEmitter = require("events").EventEmitter;
 
 function init_redis () {
   var promise = new Promise(function (resolve, reject) {
@@ -29,7 +32,6 @@ function init_redis () {
   });
   return promise;
 };
-
 
 
 /**
@@ -50,7 +52,7 @@ var RedisTokenController = {
     };
 
     controller.set_key_prefix = function (key) {
-      key = 'token-manager' + redis_settings.prefix + ":" + key;
+      return 'token-manager' + redis_settings.prefix + ":" + key;
     };
 
     controller.get = function (key, func) {
@@ -72,21 +74,28 @@ var RedisTokenController = {
   }
 };
 
-var RedisSubscribeController = {
-  createNew: function () {
-    var controller = {};
 
-    controller.init = function () {
-      var client_promise = init_redis();
-      client_promise.then(function (client) {
-        controller.client = client;
-      }, function (err) {
-        console.log(err);
-      });
-    };
-    return controller;
-  }
-};
+function RedisSubscribeController () {
+  // init and config redis
+  // inherit from event emitter
+  obj = this
+  EventEmitter.call(this);
+  redis_promise = init_redis();
+  redis_promise.then(function (client) {
+    obj.client = client;
+  }, function (err) {
+    console.error(err);
+  });
+}
+util.inherits(RedisSubscribeController, EventEmitter);
+
+RedisSubscribeController.prototype.register_event = function () {
+  obj = this
+  this.client.on('message', function (ch, msg) {
+    obj.emit('data', msg);
+  });
+  this.client.subscribe(redis_subscibe_channel);
+}
 
 /**
  * Init Redis Controllers
@@ -95,8 +104,7 @@ var RedisSubscribeController = {
 var tc = RedisTokenController.createNew();
 tc.init();
 
-var sc = RedisSubscribeController.createNew();
-sc.init();
+var sc = new RedisSubscribeController();
 
 /**
  * Export

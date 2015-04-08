@@ -6,6 +6,7 @@
 "use strict";
 
 var auth_controller = require("../auth");
+var sc = require("../redis").SubscribeController;
 
 function socket_event (socket) {
   console.log('connected to ' + socket.id);
@@ -28,6 +29,11 @@ function socket_event (socket) {
       console.error(err);
     });
     auth_controller.register(promise, socket.id);
+    sc.emit('data', '123');
+  });
+
+  sc.on('data', function (data) {
+    console.log(data);
   });
 };
 

@@ -7,12 +7,14 @@
  * Module dependencies
  */
 
- "use strict";
+"use strict";
 
 var express = require('express'),
   api = require('./api'),
   http = require('http'),
-  path = require('path');
+  path = require('path'),
+  server_settings = require('./config').SERVER_SETTINGS
+
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
@@ -22,7 +24,7 @@ var io = require('socket.io').listen(server);
  * Configuration
  */
 
-app.set('port', process.env.PORT || 7201);
+app.set('port', server_settings.port || 7201);
 
 if (app.get('env') === 'dev') {
   // TODO DEVELOP ENVIRONMENT
@@ -44,6 +46,15 @@ io.sockets.on('connection', require('./api/socket'));
  */
 
 //app.get('/api', api);
+
+/**
+ * Init Redis Controllers
+ */
+
+var tc = RedisTokenController.createNew();
+tc.init();
+
+var sc = new RedisSubscribeController();
 
 /**
  * Start Server
