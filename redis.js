@@ -78,11 +78,12 @@ var RedisTokenController = {
 function RedisSubscribeController () {
   // init and config redis
   // inherit from event emitter
-  obj = this
+  var obj = this;
   EventEmitter.call(this);
-  redis_promise = init_redis();
+  var redis_promise = init_redis();
   redis_promise.then(function (client) {
     obj.client = client;
+    obj.register_event();
   }, function (err) {
     console.error(err);
   });
@@ -90,9 +91,11 @@ function RedisSubscribeController () {
 util.inherits(RedisSubscribeController, EventEmitter);
 
 RedisSubscribeController.prototype.register_event = function () {
-  obj = this
+  var obj = this;
   this.client.on('message', function (ch, msg) {
-    obj.emit('data', msg);
+    var data = JSON.parse(msg);
+    var event_name = 'data' + data.user_id;
+    obj.emit(event_name, data.content);
   });
   this.client.subscribe(redis_subscibe_channel);
 }

@@ -40,6 +40,12 @@ if (app.get('env') === 'prod') {
 
 io.sockets.on('connection', require('./api/socket'));
 
+function spy_on_sockets () {
+  setInterval(function () {
+    // do whatever to watch the socket changes.
+  }, 5000);
+}
+
 /**
  * API Router
  * Will Not Be Used Now
@@ -48,18 +54,10 @@ io.sockets.on('connection', require('./api/socket'));
 //app.get('/api', api);
 
 /**
- * Init Redis Controllers
- */
-
-var tc = RedisTokenController.createNew();
-tc.init();
-
-var sc = new RedisSubscribeController();
-
-/**
  * Start Server
  */
 
 server.listen(app.get('port'), function () {
   console.log('Server Listening on port: ' + app.get('port'));
+  spy_on_sockets()
 })
