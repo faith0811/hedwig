@@ -38,42 +38,37 @@ function init_redis () {
  * Build Our Own Redis Controller
  */
 
-var RedisTokenController = {
-  createNew: function () {
-    var controller = {};
+function RedisTokenController () {
+  var obj = this;
+  var redis_promise = init_redis();
+  redis_promise.then(function (client) {
+    obj.client = client;
+  }, function (err) {
+    console.log(err);
+  });
+}
 
-    controller.init = function () {
-      var client_promise = init_redis();
-      client_promise.then(function (client) {
-        controller.client = client;
-      }, function (err) {
-        console.log(err);
-      });
-    };
-
-    controller.set_key_prefix = function (key) {
-      return 'token-manager' + redis_settings.prefix + ":" + key;
-    };
-
-    controller.get = function (key, func) {
-      key = controller.set_key_prefix(key);
-      return controller.client.get(key, func);
-    };
-
-    controller.set = function (key, val, func) {
-      key = controller.set_key_prefix(key);
-      return controller.client.set(key, val, func);
-    };
-
-    controller.set_ex = function (key, exp, val, func) {
-      key = controller.set_key_prefix(key);
-      return controller.client.set_ex(key, exp, val, func);
-    };
-
-    return controller;
-  }
+RedisTokenController.prototype.set_key_prefix = function (key) {
+  return redis_settings.prefix + ":" + key;
 };
 
+RedisTokenController.prototype.get = function (key, func) {
+  var obj = this;
+  key = obj.set_key_prefix(key);
+  return obj.client.get(key, func);
+};
+
+RedisTokenController.prototype.set = function (key, val, func) {
+  var obj = this;
+  key = obj.set_key_prefix(key);
+  return obj.client.set(key, val, func);
+};
+
+RedisTokenController.prototype.set_ex = function(key, exp, val, func) {
+  var obj = this;
+  key = obj.set_key_prefix(key);
+  return obj.client.set_ex(key, exp, val, func);
+};
 
 function RedisSubscribeController () {
   // init and config redis
@@ -104,8 +99,7 @@ RedisSubscribeController.prototype.register_event = function () {
  * Init Redis Controllers
  */
 
-var tc = RedisTokenController.createNew();
-tc.init();
+var tc = new RedisTokenController();
 
 var sc = new RedisSubscribeController();
 

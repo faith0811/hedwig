@@ -10,7 +10,7 @@
 "use strict";
 
 var express = require('express'),
-  api = require('./api'),
+  router = require('./router'),
   http = require('http'),
   path = require('path'),
   server_settings = require('./config').SERVER_SETTINGS
@@ -38,20 +38,14 @@ if (app.get('env') === 'prod') {
  * Socket Register
  */
 
-io.sockets.on('connection', require('./api/socket'));
-
-function spy_on_sockets () {
-  setInterval(function () {
-    // do whatever to watch the socket changes.
-  }, 5000);
-}
+io.sockets.on('connection', require('./router/socket'));
 
 /**
  * API Router
  * Will Not Be Used Now
  */
 
-//app.get('/api', api);
+// app.get('/', router);
 
 /**
  * Start Server
@@ -59,5 +53,4 @@ function spy_on_sockets () {
 
 server.listen(app.get('port'), function () {
   console.log('Server Listening on port: ' + app.get('port'));
-  spy_on_sockets()
 })
