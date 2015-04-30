@@ -1,7 +1,7 @@
-Websocket Project
-=================
+hedwig
+======
 
-This is a websocket backend server. It is based on socket.io. It can listen to Redis channel, recieve and push messages to socket.io client.
+This is a web server based on node.js, using socket.io. It can listen to recieve and push messages to socket.io client.
 
 Install
 -------
